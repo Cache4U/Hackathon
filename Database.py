@@ -9,6 +9,24 @@ from random import randint
 from faker import Faker
 
 
+class dataItem:
+    def __init__(self, item):
+        if is_jsonable(item):
+            self.item = item
+        else:
+            self.item = create_fake_dataItem()
+        self.id = hash_item(self.item)
+
+    def get_item_id(self):
+        return self.id
+
+    def get_item_from_path(self, item_path):
+        self.item = json.load(item_path)
+
+    def get_item(self):
+        return self.item
+
+
 def create_fake_dataItem():
     # Generate fake data
     fake = Faker('en_US')
@@ -58,29 +76,25 @@ class abstractDatabase(ABC):
         pass
 
     @abstractmethod
+    def insert_data_item(self, item: dataItem):
+        pass
+
+    @abstractmethod
+    def delete_data_item(self, item: dataItem):
+        pass
+
+    @abstractmethod
     def delete_from_db(self, key):
         pass
 
 
-class dataItem:
-    def __init__(self, item):
-        if is_jsonable(item):
-            self.item = item
-        else:
-            self.item = create_fake_dataItem()
-        self.id = hash_item(self.item)
-
-    def get_item_id(self):
-        return self.id
-
-    def get_item_from_path(self, item_path):
-        self.item = json.load(item_path)
-
-    def get_item(self):
-        return self.item
-
-
 class basicDatabase(abstractDatabase):
+
+    def delete_data_item(self, item: dataItem):
+        self.delete_from_db(item.get_item_id())
+
+    def insert_data_item(self, item: dataItem):
+        self.insert_to_or_update_db(item.get_item_id(), item.get_item())
 
     def __init__(self, location):
         super().__init__(location)

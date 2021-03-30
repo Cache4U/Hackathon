@@ -1,4 +1,4 @@
-from db import basicDatabase, dataItem
+from Database import basicDatabase, dataItem
 from faker import Faker
 
 import os
@@ -15,8 +15,8 @@ fake_data_item = dataItem(fake_json)
 
 # check ids are working, and get is working
 db.insert_to_or_update_db(fake_data_item.get_item_id(), fake_data_item.get_item())
-print(str(db.get_from_db(fake_data_item.get_item_id())))
+print((db.get_from_db(fake_data_item.get_item_id())))
 
 # check deletion is working 
 db.delete_from_db(fake_data_item.get_item_id())
-print(str(db.get_from_db(fake_data_item.get_item_id())))
+print((db.get_from_db(fake_data_item.get_item_id())))
