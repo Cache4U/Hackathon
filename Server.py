@@ -22,7 +22,11 @@ class CacheType(Enum):
 class Server:
     def __init__(self, cache_type: CacheType):
         self.cache_type = cache_type
-        self.caches = {cache_name: Cache() for cache_name in self.get_caches_to_create()}
+        self.global_cache = None
+        if self.cache_type == CacheType.GLOBAL:
+            self.global_cache = Cache()
+        else:
+            self.caches = {cache_name: Cache() for cache_name in self.get_caches_to_create()}
         self.db = DB()
 
     def get_caches_to_create(self) -> List[str]:
@@ -41,9 +45,14 @@ class Server:
 
     def responder(self, request: Request) -> Response:
         # handles request
-        # get response from appropiate cache if available
-        curr_cache = self.caches[request.get(cache_type)]
 
+        # find appropriate cache
+        if self.cache_type == CacheType.GLOBAL:
+            curr_cache = self.global_cache
+        else:
+            curr_cache = self.caches[request.get(cache_type)]
+
+        # get response from cache if available
         response = curr_cache.get(request)
         if response:
             return response
