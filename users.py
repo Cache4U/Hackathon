@@ -9,7 +9,9 @@ class Unit:
         self.anafs = []
 
     def add_anaf(self, anaf_id, anaf_prob):
-        self.anafs.append(Anaf(self.unit_id, anaf_id, anaf_prob))
+        new_anaf = Anaf(self.unit_id, anaf_id, anaf_prob)
+        self.anafs.append(new_anaf)
+        return new_anaf
 
     def generate_query(self,):
         pass
@@ -24,7 +26,9 @@ class Anaf:
         self.madors = []
 
     def add_mador(self, mador_id, mador_prob):
-        self.madors.append(Mador(self.unit, self.anaf_id, mador_id, mador_prob))
+        new_mador = Mador(self.unit, self.anaf_id, mador_id, mador_prob)
+        self.madors.append(new_mador)
+        return new_mador
 
     def generate_request(self):
         pass
@@ -74,5 +78,9 @@ class DataItem:
 
 class Request:
     def __init__(self, unit_id, anaf_id, mador_id, user_id):
-        pass
+        self.unit_id = unit_id
+        self.anaf_id = anaf_id
+        self.mador_id = mador_id
+        self.user_id = user_id
+
 
