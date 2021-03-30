@@ -54,7 +54,6 @@ class Server:
 
     def responder(self, request, timer):
         # handles request
-        print('in responder')
 
         # if curr_tick - last_active_tick >= cache_ticks
         if timer - self.last_busy_tick >= Consts.CACHE_TICKS:
@@ -66,7 +65,6 @@ class Server:
 
             # get response from cache if available
             response = curr_cache.get(request)
-            print('response is', response)
             if response:
                 return response
 

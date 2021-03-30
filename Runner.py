@@ -63,10 +63,8 @@ class Runner:
             response = self.server.handle_request(self.timer)
             if response is not None:
                 res, handle_time = response
-                print('yay i got a response, ' + res)
+                print('yay i got a response ' + res)
                 pass
-            else:
-                print('no response yet')
             self.sys_to_string()
 
     def generate_action(self):
