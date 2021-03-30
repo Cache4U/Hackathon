@@ -14,6 +14,22 @@ class DB:
         return "result"
 
 
+# Get children of structure on each level
+def get_children(entity):
+    # for first level
+    if type(entity) is dict:
+        return list(entity.values()), list(entity.keys())
+    # for all other levels - list of sub-entities
+    elif type(entity) is list:
+        flat_list = []
+        for sub_entity in entity:
+            flat_list += sub_entity.children
+
+        return flat_list, [child.id for child in flat_list]
+    else:
+        raise TypeError("Unexpected entity")
+
+
 class Server:
     def __init__(self, structure: dict, cache_type: SimulationType):
         self.structure = structure
@@ -34,23 +50,9 @@ class Server:
 
         # go deeper for each cache_type
         for _ in range(self.cache_type[0]):
-            curr_entity, curr_indexes = self.get_children(curr_entity)
+            curr_entity, curr_indexes = get_children(curr_entity)
 
         return curr_indexes
-
-    def get_children(self, entity):
-        # for first level
-        if type(entity) is dict:
-            return list(entity.values()), list(entity.keys())
-        # for all other levels - list of sub-entities
-        elif type(entity) is list:
-            flat_list = []
-            for sub_entity in entity:
-                flat_list += sub_entity.children
-
-            return flat_list, [child.id for child in flat_list]
-        else:
-            raise TypeError("Unexpected entity")
 
     def responder(self, request, timer):
         # handles request

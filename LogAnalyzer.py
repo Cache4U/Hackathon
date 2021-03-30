@@ -89,16 +89,17 @@ class Log:
             os.makedirs(self.path)
         self.sim_number = sim_number
 
-    def tick_update(self, server, user_id=-1, user_delay=0):
+    # def tick_update(self, server, user_id=-1, user_delay=0):
+    def tick_update(self, server, user_delay=0):
         """
         This function will be called every time tick.
         It will log the information about the current state of the cache, db, queue and users.
         :param server: containing the queue, caches and db
-        :param user_id: the user that recieved a result from the server, leave as -1 if no one got an answer
+       ###### :param user_id: the user that recieved a result from the server, leave as -1 if no one got an answer
         :param user_delay: the delay of the above result
         :return: None
         """
-        log_t = {"server_dict": server.to_string(), "user_id": user_id, "user_delay": user_delay}
+        log_t = {"server_dict": server.to_string(), "user_delay": user_delay}
         self.log_steps.append(log_t)
 
     def write(self):
