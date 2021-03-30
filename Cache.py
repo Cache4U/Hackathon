@@ -27,8 +27,10 @@ class basicCache(abstractDatabase):
 
     def get_from_db(self, key):
         if key in self.db:
+            print("hittttttttt!!!!!!!!!!!")
             return self.db[str(key)]
         else:
+            print("missssssss")
             return None
 
     # (cache miss has occurred and we are updating the cache) (called from insert)

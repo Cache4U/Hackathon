@@ -4,7 +4,7 @@ from users import User, Unit, Anaf, Mador
 import numpy as np
 import csv
 from enum import Enum
-from LogAnalyzer import Log
+from LogAnalyzer import Log, LogAnalyzer
 
 
 # timer = 0
@@ -29,10 +29,10 @@ class Runner:
         self.server = Server.Server(self.structure, simulation_type)
         self.time_to_run = time_to_run
         self.tick_length = tick_length
-        units  = Server.get_children(self.structure)[0]
+        units = Server.get_children(self.structure)[0]
         anafs = Server.get_children(units)[0]
         madors = Server.get_children(anafs)[0]
-        self.logger = Log(len(self.users), len(units), len(anafs), len(madors))
+        self.logger = Log(len(self.users), len(madors), len(anafs), len(units), "log_dir", "second_test")
 
     def create_structure(self):
         # global structure
@@ -82,12 +82,12 @@ class Runner:
             sum_rates += user.request_rate
             probs.append(user.request_rate)
 
-        p_request_exists = sum_rates*self.tick_length
-        probs = [(p/sum_rates)*p_request_exists for p in probs]
-        probs.append(1-p_request_exists)
-        chosen_user = np.random.choice(self.users+[None], 1, p=probs)[0]
-        #print(chosen_user)
-        if chosen_user is not None: # else there is no request
+        p_request_exists = sum_rates * self.tick_length
+        probs = [(p / sum_rates) * p_request_exists for p in probs]
+        probs.append(1 - p_request_exists)
+        chosen_user = np.random.choice(self.users + [None], 1, p=probs)[0]
+        # print(chosen_user)
+        if chosen_user is not None:  # else there is no request
             request = chosen_user.generate_request(self.structure[chosen_user.unit])
             self.server.push_request(request, self.timer)
 
@@ -96,10 +96,11 @@ class Runner:
 
 
 def main():
-    r = Runner(200, 0.01, SimulationType.GLOBAL.value)
+    r = Runner(2000, 0.01, SimulationType.GLOBAL.value)
     r.run()
+    LA = LogAnalyzer("log_dir", "second_test", "results")
+    LA.gen_graphs("0")
 
 
 if __name__ == '__main__':
     main()
-

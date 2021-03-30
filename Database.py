@@ -11,12 +11,16 @@ from faker import Faker
 
 
 class dataItem:
-    def __init__(self, item):
-        if is_jsonable(item):
+    def __init__(self, item, key=None):
+        if key is not None:
+            self.id = key
             self.item = item
         else:
-            self.item = create_fake_dataItem()
-        self.id = hash_item(self.item)
+            if is_jsonable(item):
+                self.item = item
+            else:
+                self.item = create_fake_dataItem()
+            self.id = hash_item(self.item)
 
     def get_item_id(self):
         return self.id
@@ -111,7 +115,7 @@ class basicDatabase(abstractDatabase):
     def get_from_db(self, key):
         if key not in self.db:
             random_data_item = create_fake_dataItem()
-            self.insert_to_or_update_db(random_data_item.get_item_id(), random_data_item.get_item())
+            self.insert_to_or_update_db(key, random_data_item.get_item())
             return random_data_item.get_item()
         else:
             return self.db[str(key)]

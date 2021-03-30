@@ -44,7 +44,7 @@ class Unit:
 
 
 class Anaf:
-    def __init__(self, unit, anaf_id, prob=0):
+    def __init__(self, unit, anaf_id, prob=0.1):
         self.unit = unit
         self.anaf_id = anaf_id
         self.prob = prob
@@ -85,7 +85,7 @@ class Anaf:
 
 
 class Mador:
-    def __init__(self, unit, anaf, mador_id, prob=0):
+    def __init__(self, unit, anaf, mador_id, prob=0.7):
         self.unit = unit
         self.anaf = anaf
         self.mador_id = mador_id
@@ -117,7 +117,7 @@ class Mador:
 
 
 class User:
-    def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=1):
+    def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=0):
         self.unit = unit
         self.anaf = anaf
         self.mador = mador
@@ -126,7 +126,8 @@ class User:
         self.prob = prob
 
     def generate_request(self, unit):
-        if random.random() < self.prob or len(unit.past_requests) == 0:
+        mador = get_mador(unit, self.anaf, self.mador)
+        if random.random() < self.prob or len(mador.past_requests)==0 or mador.past_requests is None:
             req = Request(self.unit, self.anaf, self.mador, self.user_id)
             unit.update_req(req, self.anaf, self.mador)
             return req
@@ -171,3 +172,11 @@ class Request:
         self.user_id = user_id
         self.query = hash_item(global_counter)
         global_counter += 1
+
+
+def get_mador(unit, anaf_id, mador_id):
+    for anaf in unit.anafs:
+        if anaf.anaf_id == anaf_id:
+            for mador in anaf.madors:
+                if mador.mador_id == mador_id:
+                    return mador

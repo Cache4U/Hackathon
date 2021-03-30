@@ -15,7 +15,7 @@ class LogAnalyzer:
         self.path = os.path.join(log_dir, sim_name)
         log_files = os.listdir(self.path)
 
-        self.logs = [Log(file=log_file) for log_file in log_files]
+        self.logs = [Log(file=os.path.join(self.path, log_file)) for log_file in log_files]
         self.dt = self.logs[0].dt
         self.sim_len = len(self.logs[0].log_steps)
         self.res_dir = os.path.join(res_dir, sim_name)
@@ -52,18 +52,18 @@ class LogAnalyzer:
 
     def get_queue_lens(self, log):
         log_steps = log.log_steps
-        queue_lens = [log_steps[t]["server_dict"]["curr_queue"] for t in range(log_steps)]
+        queue_lens = [log_steps[t]["server_dict"]["curr_queue"] for t in range(len(log_steps))]
         return queue_lens
 
     def get_user_delays(self, log):
         print("implement this")
         log_steps = log.log_steps
-        user_delays = [log_steps[t]["user_delay"] for t in range(log_steps)]
+        user_delays = [log_steps[t]["user_delay"] for t in range(len(log_steps))]
         return user_delays
 
 
 class Log:
-    def __init__(self, n_users=1, n_madors=1, n_anafs=1, dt=0.01, log_dir="", name="default_test", sim_number="",
+    def __init__(self, n_users=1, n_madors=1, n_anafs=1, dt=0.01, log_dir="", name="default_test", sim_number=0,
                  file=None):
         """
         This class is a log class for one simulation run
