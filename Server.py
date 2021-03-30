@@ -1,7 +1,11 @@
+import os
+
 from Runner import SimulationType
 from typing import List
 from consts import Consts
 # from globals import timer
+from Cache import basicCache
+from Database import basicDatabase, dataItem
 
 
 class Cache:
@@ -14,6 +18,17 @@ class DB:
         return "result"
 
 
+# Create DB Dir
+db_cwd = os.path.curdir
+db_dir_path = os.path.join(db_cwd, "db_dir")
+db_path = os.path.join(db_dir_path, "db.JSON")
+
+# Create DB Dir
+cache_cwd = os.path.curdir
+cache_dir_path = os.path.join(cache_cwd, "cache_dir")
+cache_path = os.path.join(cache_dir_path, "cahe.JSON")
+default_cache_capacity = 50
+
 class Server:
     def __init__(self, structure: dict, cache_type: SimulationType):
         self.structure = structure
@@ -21,10 +36,10 @@ class Server:
         self.cache_type = cache_type
         self.global_cache = None
         if self.cache_type == SimulationType.GLOBAL.value:
-            self.global_cache = Cache()
+            self.global_cache = basicCache(cache_path, default_cache_capacity)
         else:
-            self.caches = {cache_name: Cache() for cache_name in self.get_caches_to_create()}
-        self.db = DB()
+            self.caches = {cache_name: basicCache(cache_path, default_cache_capacity) for cache_name in self.get_caches_to_create()}
+        self.db = basicDatabase(db_path)
 
         self.que = []
         self.last_busy_tick = 0
@@ -64,14 +79,15 @@ class Server:
                 curr_cache = self.caches[getattr(request, self.cache_type[1])]
 
             # get response from cache if available
-            response = curr_cache.get(request)
+            response = curr_cache.get_from_db(request)
             if response:
                 return response
 
         if timer - self.last_busy_tick >= Consts.DB_TICKS:
             # if not, get from db and update cache with response
-            response = self.db.get(request)
-            curr_cache.update(request, response)
+            response = self.db.get_from_db(request)
+            data_item_response = dataItem(response)
+            curr_cache.insert_data_item(data_item_response)
 
             return response
 
