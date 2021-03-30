@@ -29,6 +29,8 @@ class Server:
             self.caches = {cache_name: Cache() for cache_name in self.get_caches_to_create()}
         self.db = DB()
 
+        self.que = []
+
     def get_caches_to_create(self) -> List[str]:
         global structures
 
@@ -37,20 +39,20 @@ class Server:
         # TODO: handle GLOBAL cache_type
 
         # go deeper for each cache_type
-        for _ in range(int(self.cache_type)):
+        for _ in range(self.cache_type.value):
             # TODO: ask from other team to have children method.
             curr_person = curr_person.children
 
         return curr_person.to_list()
 
-    def responder(self, request: Request) -> Response:
+    def responder(self, request):
         # handles request
 
         # find appropriate cache
         if self.cache_type == CacheType.GLOBAL:
             curr_cache = self.global_cache
         else:
-            curr_cache = self.caches[request.get(cache_type)]
+            curr_cache = self.caches[request.get(self.cache_type)]
 
         # get response from cache if available
         response = curr_cache.get(request)
@@ -62,3 +64,22 @@ class Server:
         curr_cache.update(request, response)
 
         return response
+
+    def push_request(self, request):
+        self.que.append(request)
+
+    def handle_request(self):
+        # req = que.top
+
+        # if curr_tick - last_active_tick >= cache_ticks
+        # go to cache
+
+        # if curr_tick - last_active_tick >= db_ticks
+        # go to db
+
+        # que.pop()
+
+        # last_active_tick = now
+
+        curr_req = self.que.pop()
+        return self.responder(curr_req)
