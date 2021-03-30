@@ -1,6 +1,7 @@
-from Database import abstractDatabase, create_fake_dataItem, dataItem
+from Database import abstractDatabase, dataItem
 import json
 import os
+from collections import OrderedDict
 
 
 class basicCache(abstractDatabase):
@@ -14,6 +15,7 @@ class basicCache(abstractDatabase):
     def __init__(self, location, capacity):
         super().__init__(location)
         self.capacity = capacity
+        self.db = OrderedDict(self.db)
 
     def delete_from_db(self, key):
         if key not in self.db:
