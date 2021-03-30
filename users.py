@@ -32,6 +32,10 @@ class Unit:
                 if anaf.anaf_id == anaf_id:
                     return anaf.generate_request(mador_id)
 
+    @property
+    def children(self):
+        return self.anafs
+
 
 class Anaf:
     def __init__(self, unit, anaf_id, prob=0):
@@ -65,6 +69,10 @@ class Anaf:
                 if mador.mador_id == mador_id:
                     return mador.generate_request()
 
+    @property
+    def children(self):
+        return self.madors
+
 
 class Mador:
     def __init__(self, unit, anaf, mador_id, prob=0):
@@ -88,6 +96,10 @@ class Mador:
 
     def generate_request(self):
         return random.choice(self.past_requests)
+
+    @property
+    def children(self):
+        return self.users
 
 
 class User:

@@ -1,5 +1,8 @@
 from enum import Enum
 from collections import List
+from Runner import structure
+from users import *
+from Runner import SimulationType
 
 
 class Cache:
@@ -12,18 +15,11 @@ class DB:
         return "result"
 
 
-class CacheType(Enum):
-    GLOBAL = 0
-    UNIT = 1
-    ANAF = 2
-    MADOR = 3
-
-
 class Server:
-    def __init__(self, cache_type: CacheType):
+    def __init__(self, cache_type: SimulationType):
         self.cache_type = cache_type
         self.global_cache = None
-        if self.cache_type == CacheType.GLOBAL:
+        if self.cache_type == SimulationType.GLOBAL:
             self.global_cache = Cache()
         else:
             self.caches = {cache_name: Cache() for cache_name in self.get_caches_to_create()}
@@ -31,25 +27,30 @@ class Server:
 
         self.que = []
 
-    def get_caches_to_create(self) -> List[str]:
-        global structures
-
-        curr_person = structures
-
-        # TODO: handle GLOBAL cache_type
+    def get_caches_to_create(self) -> List[int]:
+        curr_entity = structure
 
         # go deeper for each cache_type
-        for _ in range(self.cache_type.value):
-            # TODO: ask from other team to have children method.
-            curr_person = curr_person.children
+        for _ in range(self.cache_type.value[0]):
+            curr_entity = self.get_children(curr_entity)
 
-        return curr_person.to_list()
+        return curr_entity
+
+    def get_children(self, entity):
+        # for first level
+        if type(entity) is dict:
+            return entity.keys()
+        # for all other levels - list of sub-entities
+        elif type(entity) is list:
+            return [child_entity.children for child_entity in entity]
+        else:
+            raise TypeError("Unexpected entity")
 
     def responder(self, request):
         # handles request
 
         # find appropriate cache
-        if self.cache_type == CacheType.GLOBAL:
+        if self.cache_type == SimulationType.GLOBAL:
             curr_cache = self.global_cache
         else:
             curr_cache = self.caches[request.get(self.cache_type)]

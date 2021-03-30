@@ -1,5 +1,5 @@
 from Server import *
-from User import *
+from users import *
 import numpy as np
 import csv
 from enum import Enum
