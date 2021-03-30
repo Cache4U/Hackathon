@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fc3b6947-a418-4fc5-bab8-a2ff80af74fd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/consts.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/globals.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Hackathon.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Hackathon.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Runner.py" beforeDir="false" afterPath="$PROJECT_DIR$/Runner.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Server.py" beforeDir="false" afterPath="$PROJECT_DIR$/Server.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/users.py" beforeDir="false" afterPath="$PROJECT_DIR$/users.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,7 +114,21 @@
       <option name="project" value="LOCAL" />
       <updated>1617123912373</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="server with queue">
+      <created>1617138809098</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1617138809098</updated>
+    </task>
+    <task id="LOCAL-00004" summary="server with queue no prints">
+      <created>1617138975137</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1617138975137</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
@@ -146,29 +153,31 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fixed branch for runner" />
     <MESSAGE value="send requests to server" />
-    <option name="LAST_COMMIT_MESSAGE" value="send requests to server" />
+    <MESSAGE value="server with queue" />
+    <MESSAGE value="server with queue no prints" />
+    <option name="LAST_COMMIT_MESSAGE" value="server with queue no prints" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="600" y="129" width="777" height="847" key="CommitChangelistDialog2" timestamp="1617138808969">
+    <state x="600" y="129" width="777" height="847" key="CommitChangelistDialog2" timestamp="1617138975050">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state x="600" y="129" width="777" height="847" key="CommitChangelistDialog2/67.27.1853.1053@67.27.1853.1053" timestamp="1617138808969" />
-    <state width="1830" height="376" key="GridCell.Tab.0.bottom" timestamp="1617138935958">
+    <state x="600" y="129" width="777" height="847" key="CommitChangelistDialog2/67.27.1853.1053@67.27.1853.1053" timestamp="1617138975050" />
+    <state width="1830" height="256" key="GridCell.Tab.0.bottom" timestamp="1617139077598">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state width="1830" height="376" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1617138935958" />
-    <state width="1830" height="376" key="GridCell.Tab.0.center" timestamp="1617138935958">
+    <state width="1830" height="256" key="GridCell.Tab.0.bottom/67.27.1853.1053@67.27.1853.1053" timestamp="1617139077598" />
+    <state width="1830" height="256" key="GridCell.Tab.0.center" timestamp="1617139077596">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state width="1830" height="376" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1617138935958" />
-    <state width="1830" height="376" key="GridCell.Tab.0.left" timestamp="1617138935957">
+    <state width="1830" height="256" key="GridCell.Tab.0.center/67.27.1853.1053@67.27.1853.1053" timestamp="1617139077596" />
+    <state width="1830" height="256" key="GridCell.Tab.0.left" timestamp="1617139077594">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state width="1830" height="376" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1617138935957" />
-    <state width="1830" height="376" key="GridCell.Tab.0.right" timestamp="1617138935958">
+    <state width="1830" height="256" key="GridCell.Tab.0.left/67.27.1853.1053@67.27.1853.1053" timestamp="1617139077594" />
+    <state width="1830" height="256" key="GridCell.Tab.0.right" timestamp="1617139077597">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
-    <state width="1830" height="376" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1617138935958" />
+    <state width="1830" height="256" key="GridCell.Tab.0.right/67.27.1853.1053@67.27.1853.1053" timestamp="1617139077597" />
     <state width="1830" height="344" key="GridCell.Tab.1.bottom" timestamp="1617138530086">
       <screen x="67" y="27" width="1853" height="1053" />
     </state>
@@ -201,11 +210,6 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/Server.py</url>
-          <line>59</line>
-          <option name="timeStamp" value="19" />
-        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/globals.py</url>
           <option name="timeStamp" value="21" />
