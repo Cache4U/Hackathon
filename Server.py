@@ -70,7 +70,7 @@ class Server:
 
         if timer - self.last_busy_tick >= Consts.DB_TICKS:
             # if not, get from db and update cache with response
-            response = self.db.get(request)
+            response = self.db.get_from_db(request)
             curr_cache.update(request, response)
 
             return response
