@@ -40,7 +40,9 @@ class Mador:
         self.users = []
 
     def add_user(self, user_id):
-        self.users.append(User(self.unit, self.anaf, self.mador_id, user_id))
+        new_user = User(self.unit, self.anaf, self.mador_id, user_id)
+        self.users.append(new_user)
+        return new_user
 
     def generate_request(self):
         pass
