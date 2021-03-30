@@ -87,7 +87,8 @@ class User:
 
     def generate_request(self, unit):
         if random.random() < self.prob or len(unit.past_requrests) != 0:
-            return Request(self.unit, self.anaf, self.mador, self.user_id)
+            req = Request(self.unit, self.anaf, self.mador, self.user_id)
+            #TODO update past requests in unit anaf mador
         else:
             return unit.generate_requests(self.anaf, self.mador)
 
@@ -101,9 +102,9 @@ class DataItem:
 
 
 class Request:
-    def __init__(self, unit_id, anaf_id, mador_id, user_id, queue):
+    def __init__(self, unit_id, anaf_id, mador_id, user_id, query):
         self.unit_id = unit_id
         self.anaf_id = anaf_id
         self.mador_id = mador_id
         self.user_id = user_id
-        self.queue = queue
+        self.query = query
