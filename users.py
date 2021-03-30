@@ -1,5 +1,5 @@
 import random
-
+import copy
 
 class Unit:
     def __init__(self, unit_id, prob=0):
@@ -91,7 +91,7 @@ class Mador:
 
 
 class User:
-    def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=0):
+    def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=1):
         self.unit = unit
         self.anaf = anaf
         self.mador = mador
@@ -105,7 +105,12 @@ class User:
             unit.update_req(req, self.anaf, self.mador)
             return req
         else:
-            return unit.generate_requests(self.anaf, self.mador)
+            req = copy.deepcopy(unit.generate_requests(self.anaf, self.mador))
+            req.unit_id = self.unit
+            req.anaf_id = self.anaf
+            req.mador_id = self.mador
+            req.user_id = self.user_id
+            return req
 
     def update_request_rate(self, rq):
         self.request_rate = rq
