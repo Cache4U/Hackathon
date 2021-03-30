@@ -62,3 +62,17 @@ class Server:
         curr_cache.update(request, response)
 
         return response
+
+    def to_string(self):
+        server_dict = {}
+        server_dict["curr_queue"] = 0  # change this after implementing queue
+        # bank_size = len(self.db.db.keys) # change this after integration with DB
+        bank_size = 0  # change this after integration with DB
+        server_dict["bank_size"] = bank_size
+
+        cache_sizes = []
+        for cache in self.caches:
+            cache_sizes.append(0)  # change this after integration with Cache
+
+        server_dict["cache_sizes"] = cache_sizes
+        return server_dict
