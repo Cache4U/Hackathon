@@ -1,5 +1,7 @@
 from Runner import SimulationType
 from typing import List
+from consts import Consts
+# from globals import timer
 
 
 class Cache:
@@ -25,6 +27,7 @@ class Server:
         self.db = DB()
 
         self.que = []
+        self.last_busy_tick = 0
 
     def get_caches_to_create(self) -> List[int]:
         curr_entity = self.structure
@@ -49,46 +52,54 @@ class Server:
         else:
             raise TypeError("Unexpected entity")
 
-    def responder(self, request):
+    def responder(self, request, timer):
         # handles request
+        print('in responder')
 
-        # find appropriate cache
-        if self.cache_type == SimulationType.GLOBAL.value:
-            curr_cache = self.global_cache
-        else:
-            curr_cache = self.caches[getattr(request, self.cache_type[1])]
+        # if curr_tick - last_active_tick >= cache_ticks
+        if timer - self.last_busy_tick >= Consts.CACHE_TICKS:
+            # find appropriate cache
+            if self.cache_type == SimulationType.GLOBAL.value:
+                curr_cache = self.global_cache
+            else:
+                curr_cache = self.caches[getattr(request, self.cache_type[1])]
 
-        # get response from cache if available
-        response = curr_cache.get(request)
-        if response:
+            # get response from cache if available
+            response = curr_cache.get(request)
+            print('response is', response)
+            if response:
+                return response
+
+        if timer - self.last_busy_tick >= Consts.DB_TICKS:
+            # if not, get from db and update cache with response
+            response = self.db.get(request)
+            curr_cache.update(request, response)
+
             return response
 
-        # if not, get from db and update cache with response
-        response = self.db.get(request)
-        curr_cache.update(request, response)
-
-        return response
+        # Not enough ticks! return none
+        return None
 
     def push_request(self, request):
         self.que.append(request)
 
-    def handle_request(self):
-        # req = que.top
-
-        # if curr_tick - last_active_tick >= cache_ticks
-        # go to cache
-
-        # if curr_tick - last_active_tick >= db_ticks
-        # go to db
-
-        # que.pop()
-
-        # last_active_tick = now
-
+    def handle_request(self, timer):
         try:
-            curr_req = self.que.pop()
-            return self.responder(curr_req)
+            req = self.que[0]
+
+            result = self.responder(req, timer)
+
+            if result:
+                self.que = self.que[1:]
+
+                self.last_busy_tick = timer
+
+                # returns result + time of request handling
+                return result, timer - req.creation_time
+        # TODO: WTH ???
         except IndexError:
             pass
+
+
 
 

@@ -1,5 +1,6 @@
 import random
 import copy
+from globals import timer
 
 class Unit:
     def __init__(self, unit_id, prob=0):
@@ -159,5 +160,8 @@ class Request:
         self.anaf_id = anaf_id
         self.mador_id = mador_id
         self.user_id = user_id
+
+        self.creation_time = timer
+
         self.query = global_counter
         global_counter += 1
