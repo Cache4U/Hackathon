@@ -4,6 +4,7 @@ import json
 import os
 from abc import ABC, abstractmethod
 from hashlib import sha256
+from collections import OrderedDict
 from random import randint
 
 from faker import Faker
@@ -55,7 +56,7 @@ def hash_item(dictionary_item):
 class abstractDatabase(ABC):
 
     def __init__(self, location):
-        self.db = {}
+        self.db = OrderedDict()
         self.db_location = os.path.expanduser(location)
         self.load_from_file(self.db_location)
 
