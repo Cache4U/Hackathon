@@ -1,8 +1,5 @@
-from enum import Enum
-from collections import List
-from Runner import structure
-from users import *
 from Runner import SimulationType
+from typing import List
 
 
 class Cache:
@@ -16,10 +13,12 @@ class DB:
 
 
 class Server:
-    def __init__(self, cache_type: SimulationType):
+    def __init__(self, structure: dict, cache_type: SimulationType):
+        self.structure = structure
+
         self.cache_type = cache_type
         self.global_cache = None
-        if self.cache_type == SimulationType.GLOBAL:
+        if self.cache_type == SimulationType.GLOBAL.value:
             self.global_cache = Cache()
         else:
             self.caches = {cache_name: Cache() for cache_name in self.get_caches_to_create()}
@@ -28,21 +27,25 @@ class Server:
         self.que = []
 
     def get_caches_to_create(self) -> List[int]:
-        curr_entity = structure
+        curr_entity = self.structure
 
         # go deeper for each cache_type
-        for _ in range(self.cache_type.value[0]):
-            curr_entity = self.get_children(curr_entity)
+        for _ in range(self.cache_type[0]):
+            curr_entity, curr_indexes = self.get_children(curr_entity)
 
-        return curr_entity
+        return curr_indexes
 
     def get_children(self, entity):
         # for first level
         if type(entity) is dict:
-            return entity.keys()
+            return list(entity.values()), list(entity.keys())
         # for all other levels - list of sub-entities
         elif type(entity) is list:
-            return [child_entity.children for child_entity in entity]
+            flat_list = []
+            for sub_entity in entity:
+                flat_list += sub_entity.children
+
+            return flat_list, [child.id for child in flat_list]
         else:
             raise TypeError("Unexpected entity")
 
@@ -50,10 +53,10 @@ class Server:
         # handles request
 
         # find appropriate cache
-        if self.cache_type == SimulationType.GLOBAL:
+        if self.cache_type == SimulationType.GLOBAL.value:
             curr_cache = self.global_cache
         else:
-            curr_cache = self.caches[request.get(self.cache_type)]
+            curr_cache = self.caches[getattr(request, self.cache_type[1])]
 
         # get response from cache if available
         response = curr_cache.get(request)
@@ -82,5 +85,10 @@ class Server:
 
         # last_active_tick = now
 
-        curr_req = self.que.pop()
-        return self.responder(curr_req)
+        try:
+            curr_req = self.que.pop()
+            return self.responder(curr_req)
+        except IndexError:
+            pass
+
+

@@ -36,6 +36,10 @@ class Unit:
     def children(self):
         return self.anafs
 
+    @property
+    def id(self):
+        return self.unit_id
+
 
 class Anaf:
     def __init__(self, unit, anaf_id, prob=0):
@@ -73,6 +77,10 @@ class Anaf:
     def children(self):
         return self.madors
 
+    @property
+    def id(self):
+        return self.anaf_id
+
 
 class Mador:
     def __init__(self, unit, anaf, mador_id, prob=0):
@@ -101,6 +109,10 @@ class Mador:
     def children(self):
         return self.users
 
+    @property
+    def id(self):
+        return self.mador_id
+
 
 class User:
     def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=1):
@@ -126,6 +138,10 @@ class User:
 
     def update_request_rate(self, rq):
         self.request_rate = rq
+
+    @property
+    def id(self):
+        return self.user_id
 
 
 class DataItem:
