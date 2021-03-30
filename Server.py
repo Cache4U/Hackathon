@@ -1,16 +1,15 @@
 from Runner import SimulationType
 from typing import List
 from consts import Consts
-from Database import basicDatabase
-import os
-
-# Create DB Dir
-cwd = os.path.curdir
-db_dir_path = os.path.join(cwd, "db_dir")
-db_path = os.path.join(db_dir_path, "db.JSON")
+# from globals import timer
 
 
 class Cache:
+    def get(self, req):
+        return "result"
+
+
+class DB:
     def get(self, req):
         return "result"
 
@@ -25,7 +24,7 @@ class Server:
             self.global_cache = Cache()
         else:
             self.caches = {cache_name: Cache() for cache_name in self.get_caches_to_create()}
-        self.db = basicDatabase(db_path)
+        self.db = DB()
 
         self.que = []
         self.last_busy_tick = 0
