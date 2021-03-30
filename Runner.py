@@ -41,14 +41,12 @@ class Runner:
                     anaf_id = int(row[2])
                     mador_id = int(row[3])
                     request_rate = int(row[4])
-                    # TODO create unit & anaf & mador if not exist
                     if unit_id not in structure.keys():
                         structure[unit_id] = Unit(unit_id)
                     anaf = structure[unit_id].add_anaf(anaf_id)
                     mador = anaf.add_mador(mador_id)
                     user = mador.add_user(id, request_rate)
                     users.append(user)
-                    # users.append(User(id, unit_id, anaf_id, mador_id, request_rate))
                     line_count += 1
         return users
 
@@ -57,7 +55,9 @@ class Runner:
         while timer < self.time_to_run:
             self.generate_action()
             timer += 1
-            # self.server.handle()
+            response = self.server.handle_request()
+            if response is not None:
+                pass
             self.sys_to_string()
 
     def generate_action(self):
@@ -74,6 +74,7 @@ class Runner:
         print(chosen_user)
         if chosen_user is not None: # else there is no request
             request = chosen_user.generate_request(structure[chosen_user.unit])
+            self.server.push_request(request)
 
     def sys_to_string(self):
         pass
