@@ -24,7 +24,7 @@ class Unit:
         else:
             for anaf in self.anafs:
                 if anaf.anaf_id == anaf_id:
-                    return anaf.generate_requests(mador_id)
+                    return anaf.generate_request(mador_id)
 
 
 
@@ -52,7 +52,7 @@ class Anaf:
         else:
             for mador in self.madors:
                 if mador.mador_id == mador_id:
-                    return mador.generate_requests()
+                    return mador.generate_request()
 
 
 class Mador:
@@ -86,7 +86,7 @@ class User:
         self.prob = prob
 
     def generate_request(self, unit):
-        if random.random() < self.prob or len(unit.past_requrests) != 0:
+        if random.random() < self.prob or len(unit.past_requests) == 0:
             return Request(self.unit, self.anaf, self.mador, self.user_id)
         else:
             return unit.generate_requests(self.anaf, self.mador)
