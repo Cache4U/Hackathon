@@ -10,9 +10,9 @@ structure = {}
 
 class SimulationType(Enum):
     GLOBAL = (0, 'global')
-    UNIT = (1, 'unit')
-    ANAF = (2, 'anaf')
-    MADOR = (3, 'mador')
+    UNIT = (1, 'unit_id')
+    ANAF = (2, 'anaf_id')
+    MADOR = (3, 'mador_id')
 
 
 class Runner:
@@ -21,7 +21,7 @@ class Runner:
 
     def __init__(self, time_to_run, tick_length, simulation_type):
         self.users = self.create_structure()
-        self.server = Server(simulation_type)
+        self.server = Server(structure, simulation_type)
         self.time_to_run = time_to_run
         self.tick_length = tick_length
 
@@ -57,6 +57,7 @@ class Runner:
             timer += 1
             response = self.server.handle_request()
             if response is not None:
+                print('yay i got a response, ' + response)
                 pass
             self.sys_to_string()
 
@@ -71,7 +72,7 @@ class Runner:
         probs = [(p/sum_rates)*p_request_exists for p in probs]
         probs.append(1-p_request_exists)
         chosen_user = np.random.choice(self.users+[None], 1, p=probs)[0]
-        print(chosen_user)
+        #print(chosen_user)
         if chosen_user is not None: # else there is no request
             request = chosen_user.generate_request(structure[chosen_user.unit])
             self.server.push_request(request)
@@ -83,7 +84,6 @@ class Runner:
 def main():
     r = Runner(20, 0.01, SimulationType.GLOBAL.value)
     r.run()
-    print(len(structure[2].anafs[1].madors))
 
 
 if __name__ == '__main__':

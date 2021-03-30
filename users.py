@@ -32,6 +32,14 @@ class Unit:
                 if anaf.anaf_id == anaf_id:
                     return anaf.generate_request(mador_id)
 
+    @property
+    def children(self):
+        return self.anafs
+
+    @property
+    def id(self):
+        return self.unit_id
+
 
 class Anaf:
     def __init__(self, unit, anaf_id, prob=0):
@@ -65,6 +73,14 @@ class Anaf:
                 if mador.mador_id == mador_id:
                     return mador.generate_request()
 
+    @property
+    def children(self):
+        return self.madors
+
+    @property
+    def id(self):
+        return self.anaf_id
+
 
 class Mador:
     def __init__(self, unit, anaf, mador_id, prob=0):
@@ -88,6 +104,14 @@ class Mador:
 
     def generate_request(self):
         return random.choice(self.past_requests)
+
+    @property
+    def children(self):
+        return self.users
+
+    @property
+    def id(self):
+        return self.mador_id
 
 
 class User:
@@ -114,6 +138,10 @@ class User:
 
     def update_request_rate(self, rq):
         self.request_rate = rq
+
+    @property
+    def id(self):
+        return self.user_id
 
 
 class DataItem:
