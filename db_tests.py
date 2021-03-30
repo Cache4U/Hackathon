@@ -5,7 +5,7 @@ import os
 
 # Create DB Dir
 cwd = os.path.curdir
-db_dir_path = os.path.join(cwd, "db_dir")
+db_dir_path = os.path.join(cwd, "db_dir_adiel")
 db_path = os.path.join(db_dir_path, "db.JSON")
 
 db = basicDatabase(db_path)
