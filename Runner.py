@@ -1,11 +1,13 @@
-from Server import *
-from users import *
+import Server
+from users import User, Unit, Anaf, Mador
+# from globals import timer, structure
 import numpy as np
 import csv
 from enum import Enum
 
-timer = 0
-structure = {}
+
+# timer = 0
+# structure = {}
 
 
 class SimulationType(Enum):
@@ -16,17 +18,19 @@ class SimulationType(Enum):
 
 
 class Runner:
-    global timer
-    global structure
+    # global timer
+    # global structure
 
     def __init__(self, time_to_run, tick_length, simulation_type):
+        self.timer = 0
+        self.structure = {}
         self.users = self.create_structure()
-        self.server = Server(structure, simulation_type)
+        self.server = Server.Server(self.structure, simulation_type)
         self.time_to_run = time_to_run
         self.tick_length = tick_length
 
     def create_structure(self):
-        global structure
+        # global structure
         users = []
 
         with open('users_conf_sample.csv') as csv_file:
@@ -41,9 +45,9 @@ class Runner:
                     anaf_id = int(row[2])
                     mador_id = int(row[3])
                     request_rate = int(row[4])
-                    if unit_id not in structure.keys():
-                        structure[unit_id] = Unit(unit_id)
-                    anaf = structure[unit_id].add_anaf(anaf_id)
+                    if unit_id not in self.structure.keys():
+                        self.structure[unit_id] = Unit(unit_id)
+                    anaf = self.structure[unit_id].add_anaf(anaf_id)
                     mador = anaf.add_mador(mador_id)
                     user = mador.add_user(id, request_rate)
                     users.append(user)
@@ -51,13 +55,15 @@ class Runner:
         return users
 
     def run(self):
-        global timer
-        while timer < self.time_to_run:
+        # global timer
+        while self.timer < self.time_to_run:
+            print(self.timer)
             self.generate_action()
-            timer += 1
-            response = self.server.handle_request()
+            self.timer += 1
+            response = self.server.handle_request(self.timer)
             if response is not None:
-                print('yay i got a response, ' + response)
+                res, handle_time = response
+                print('yay i got a response ' + res)
                 pass
             self.sys_to_string()
 
@@ -74,15 +80,15 @@ class Runner:
         chosen_user = np.random.choice(self.users+[None], 1, p=probs)[0]
         #print(chosen_user)
         if chosen_user is not None: # else there is no request
-            request = chosen_user.generate_request(structure[chosen_user.unit])
-            self.server.push_request(request)
+            request = chosen_user.generate_request(self.structure[chosen_user.unit])
+            self.server.push_request(request, self.timer)
 
     def sys_to_string(self):
         pass
 
 
 def main():
-    r = Runner(20, 0.01, SimulationType.GLOBAL.value)
+    r = Runner(200, 0.01, SimulationType.GLOBAL.value)
     r.run()
 
 
