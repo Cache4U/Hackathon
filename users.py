@@ -1,5 +1,7 @@
 import random
 import copy
+import json
+from hashlib import sha256
 
 class Unit:
     def __init__(self, unit_id, prob=0):
@@ -31,6 +33,14 @@ class Unit:
             for anaf in self.anafs:
                 if anaf.anaf_id == anaf_id:
                     return anaf.generate_request(mador_id)
+
+    @property
+    def children(self):
+        return self.anafs
+
+    @property
+    def id(self):
+        return self.unit_id
 
 
 class Anaf:
@@ -65,6 +75,14 @@ class Anaf:
                 if mador.mador_id == mador_id:
                     return mador.generate_request()
 
+    @property
+    def children(self):
+        return self.madors
+
+    @property
+    def id(self):
+        return self.anaf_id
+
 
 class Mador:
     def __init__(self, unit, anaf, mador_id, prob=0):
@@ -88,6 +106,14 @@ class Mador:
 
     def generate_request(self):
         return random.choice(self.past_requests)
+
+    @property
+    def children(self):
+        return self.users
+
+    @property
+    def id(self):
+        return self.mador_id
 
 
 class User:
@@ -115,6 +141,10 @@ class User:
     def update_request_rate(self, rq):
         self.request_rate = rq
 
+    @property
+    def id(self):
+        return self.user_id
+
 
 class DataItem:
     def __init__(self):
@@ -124,6 +154,14 @@ class DataItem:
 global_counter = 0
 
 
+def hash_item(dictionary_item):
+    """Kind of a hack, but it works."""
+    serialized = json.dumps(dictionary_item, sort_keys=True)
+    h = sha256()
+    h.update(serialized.encode('utf-8'))
+    return h.hexdigest()
+
+
 class Request:
     def __init__(self, unit_id, anaf_id, mador_id, user_id):
         global global_counter
@@ -131,5 +169,5 @@ class Request:
         self.anaf_id = anaf_id
         self.mador_id = mador_id
         self.user_id = user_id
-        self.query = global_counter
+        self.query = hash_item(global_counter)
         global_counter += 1
