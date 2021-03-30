@@ -8,10 +8,10 @@ class Unit:
         self.past_requests = []
         self.anafs = []
 
-    def add_anaf(self, anaf_id, anaf_prob):
+    def add_anaf(self, anaf_id, anaf_prob=0):
         for anaf in self.anafs:
             if anaf.anaf_id == anaf_id:
-                return None
+                return anaf
         new_anaf = Anaf(self.unit_id, anaf_id, anaf_prob)
         self.anafs.append(new_anaf)
         return new_anaf
@@ -36,10 +36,10 @@ class Anaf:
         self.past_requests = []
         self.madors = []
 
-    def add_mador(self, mador_id, mador_prob):
+    def add_mador(self, mador_id, mador_prob=0):
         for mador in self.madors:
             if mador.mador_id == mador_id:
-                return None
+                return mador
         new_mador = Mador(self.unit, self.anaf_id, mador_id, mador_prob)
         self.madors.append(new_mador)
         return new_mador
@@ -64,11 +64,11 @@ class Mador:
         self.past_requests = []
         self.users = []
 
-    def add_user(self, user_id):
+    def add_user(self, user_id, request_rate=1):
         for user in self.users:
             if user.user_id == user_id:
-                return None
-        new_user = User(self.unit, self.anaf, self.mador_id, user_id)
+                return user
+        new_user = User(self.unit, self.anaf, self.mador_id, user_id, request_rate)
         self.users.append(new_user)
         return new_user
 
