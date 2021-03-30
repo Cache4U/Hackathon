@@ -1,11 +1,9 @@
 from Server import *
 from User import *
-# from Structure import *
 import numpy as np
 import csv
 from enum import Enum
 
-# NUM_OF_USERS = 100
 timer = 0
 structure = {}
 
@@ -22,7 +20,6 @@ class Runner:
     global structure
 
     def __init__(self, time_to_run, tick_length, simulation_type):
-        # self.num_of_users = NUM_OF_USERS
         self.users = self.create_structure()
         self.server = Server(simulation_type)
         self.time_to_run = time_to_run
@@ -70,18 +67,22 @@ class Runner:
             sum_rates += user.request_rate
             probs.append(user.request_rate)
 
-        probs = [p/sum_rates for p in probs]
-        chosen_user = np.random.choice(self.users, 1, p=probs)[0]
-        request = chosen_user.generate_request(structure[chosen_user.unit])
+        p_request_exists = sum_rates*self.tick_length
+        probs = [(p/sum_rates)*p_request_exists for p in probs]
+        probs.append(1-p_request_exists)
+        chosen_user = np.random.choice(self.users+[None], 1, p=probs)[0]
+        print(chosen_user)
+        if chosen_user is not None: # else there is no request
+            request = chosen_user.generate_request(structure[chosen_user.unit])
 
     def sys_to_string(self):
         pass
 
 
 def main():
-    r = Runner(10, 0.1, SimulationType.GLOBAL.value)
+    r = Runner(20, 0.01, SimulationType.GLOBAL.value)
     r.run()
-    print(len(structure[1].anafs[0].madors[0].users))
+    print(len(structure[2].anafs[1].madors))
 
 
 if __name__ == '__main__':
