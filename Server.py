@@ -26,7 +26,7 @@ db_path = os.path.join(db_dir_path, "db.JSON")
 # Create DB Dir
 cache_cwd = os.path.curdir
 cache_dir_path = os.path.join(cache_cwd, "cache_dir")
-cache_path = os.path.join(cache_dir_path, "cahe.JSON")
+cache_path = os.path.join(cache_dir_path, "cache.JSON")
 default_cache_capacity = 50
 
 class Server:
@@ -116,14 +116,14 @@ class Server:
 
     def to_string(self):
         server_dict = {}
-        server_dict["curr_queue"] = 0  # change this after implementing queue
+        server_dict["curr_queue"] = len(self.que)  # change this after implementing queue
         # bank_size = len(self.db.db.keys) # change this after integration with DB
         bank_size = 0  # change this after integration with DB
-        server_dict["bank_size"] = bank_size
+        server_dict["bank_size"] = len(self.db.db)
 
         cache_sizes = []
         for cache in self.caches:
-            cache_sizes.append(0)  # change this after integration with Cache
+            cache_sizes.append(len(cache.db))  # change this after integration with Cache
 
         server_dict["cache_sizes"] = cache_sizes
         return server_dict
