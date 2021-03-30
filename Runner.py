@@ -4,6 +4,7 @@ from users import User, Unit, Anaf, Mador
 import numpy as np
 import csv
 from enum import Enum
+from LogAnalyzer import Log
 
 
 # timer = 0
@@ -28,6 +29,10 @@ class Runner:
         self.server = Server.Server(self.structure, simulation_type)
         self.time_to_run = time_to_run
         self.tick_length = tick_length
+        units  = Server.get_children(self.structure)[0]
+        anafs = Server.get_children(units)[0]
+        madors = Server.get_children(anafs)[0]
+        self.logger = Log(len(self.users), len(units), len(anafs), len(madors))
 
     def create_structure(self):
         # global structure
@@ -64,8 +69,11 @@ class Runner:
             if response is not None:
                 res, handle_time = response
                 print('yay i got a response ' + res)
-                pass
+                self.logger.tick_update(self.server, handle_time)
+            else:
+                self.logger.tick_update(self.server)
             self.sys_to_string()
+        self.logger.write()
 
     def generate_action(self):
         probs = []

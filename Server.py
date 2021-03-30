@@ -18,6 +18,21 @@ class DB:
         return "result"
 
 
+# Get children of structure on each level
+def get_children(entity):
+    # for first level
+    if type(entity) is dict:
+        return list(entity.values()), list(entity.keys())
+    # for all other levels - list of sub-entities
+    elif type(entity) is list:
+        flat_list = []
+        for sub_entity in entity:
+            flat_list += sub_entity.children
+
+        return flat_list, [child.id for child in flat_list]
+    else:
+        raise TypeError("Unexpected entity")
+
 # Create DB Dir
 db_cwd = os.path.curdir
 db_dir_path = os.path.join(db_cwd, "db_dir")
@@ -28,6 +43,7 @@ cache_cwd = os.path.curdir
 cache_dir_path = os.path.join(cache_cwd, "cache_dir")
 cache_path = os.path.join(cache_dir_path, "cache.JSON")
 default_cache_capacity = 50
+
 
 class Server:
     def __init__(self, structure: dict, cache_type: SimulationType):
@@ -49,23 +65,9 @@ class Server:
 
         # go deeper for each cache_type
         for _ in range(self.cache_type[0]):
-            curr_entity, curr_indexes = self.get_children(curr_entity)
+            curr_entity, curr_indexes = get_children(curr_entity)
 
         return curr_indexes
-
-    def get_children(self, entity):
-        # for first level
-        if type(entity) is dict:
-            return list(entity.values()), list(entity.keys())
-        # for all other levels - list of sub-entities
-        elif type(entity) is list:
-            flat_list = []
-            for sub_entity in entity:
-                flat_list += sub_entity.children
-
-            return flat_list, [child.id for child in flat_list]
-        else:
-            raise TypeError("Unexpected entity")
 
     def responder(self, request, timer):
         # handles request
