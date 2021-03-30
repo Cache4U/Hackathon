@@ -1,8 +1,13 @@
+# TODO: Abstract Database, Database Implementation, and DataItem class
+
 import json
 import os
 from abc import ABC, abstractmethod
 from hashlib import sha256
+from random import randint
+
 from faker import Faker
+
 
 class dataItem:
     def __init__(self, item):
@@ -20,6 +25,7 @@ class dataItem:
 
     def get_item(self):
         return self.item
+
 
 def create_fake_dataItem():
     # Generate fake data
@@ -44,6 +50,7 @@ def hash_item(dictionary_item):
     h = sha256()
     h.update(serialized.encode('utf-8'))
     return h.hexdigest()
+
 
 class abstractDatabase(ABC):
 
