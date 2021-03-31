@@ -42,11 +42,15 @@ class LogAnalyzer:
         ts = np.linspace(0, self.dt * self.sim_len, self.sim_len)
         plt.fill_between(ts, min_queue_lens, max_queue_lens)
         plt.plot(ts, mean_queue_lens)
+        plt.xlabel("time [sec]")
+        plt.ylabel("queue length")
         plt.savefig(os.path.join(self.res_dir, "queue_lens"))
         plt.close('all')
 
         plt.fill_between(ts, min_users_delays, max_users_delays)
         plt.plot(ts, mean_users_delays)
+        plt.xlabel("time [sec]")
+        plt.ylabel("user delays")
         plt.savefig(os.path.join(self.res_dir, "users_delays"))
         plt.close('all')
 
@@ -167,4 +171,5 @@ if __name__ == '__main__':
                      a_max, alpha=0.2, color=CB91_Purple)
     plt.plot([1, 2, 3, 4, 5],
              a_mean, color=CB91_Purple, lw=2.5)
+
     plt.savefig("./test1.jpg")
