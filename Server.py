@@ -42,7 +42,7 @@ db_path = os.path.join(db_dir_path, "db.JSON")
 cache_cwd = os.path.curdir
 cache_dir_path = os.path.join(cache_cwd, "cache_dir")
 cache_path = os.path.join(cache_dir_path, "cache")
-default_cache_capacity = 50
+default_cache_capacity = 40
 
 counter = 0
 
@@ -57,7 +57,7 @@ class Server:
             cache_path = cache_path+".JSON"
             self.global_cache = basicCache(cache_path, default_cache_capacity)
         else:
-            self.caches = {cache_name: basicCache(cache_path+i+".JSON", default_cache_capacity) for i, cache_name in enumerate(self.get_caches_to_create())}
+            self.caches = {cache_name: basicCache(cache_path+str(i)+".JSON", default_cache_capacity) for i, cache_name in enumerate(self.get_caches_to_create())}
         self.db = basicDatabase(db_path)
 
         self.que = []
@@ -81,7 +81,7 @@ class Server:
             if self.cache_type == SimulationType.GLOBAL.value:
                 curr_cache = self.global_cache
             else:
-                curr_cache = self.caches[getattr(request, self.cache_type[1])]
+                curr_cache = self.caches[getattr(request, self.cache_type[1])] # by the attr of cache type[1]
 
             # get response from cache if available
             response = curr_cache.get_from_db(request.query)
@@ -130,7 +130,7 @@ class Server:
         if self.global_cache:
             cache_sizes = [len(self.global_cache.db)]
         else:
-            for cache in self.caches:
+            for cache in self.caches.values():
                 cache_sizes.append(len(cache.db))  # change this after integration with Cache
 
         server_dict["cache_sizes"] = cache_sizes

@@ -32,7 +32,7 @@ class Runner:
         units = Server.get_children(self.structure)[0]
         anafs = Server.get_children(units)[0]
         madors = Server.get_children(anafs)[0]
-        self.logger = Log(len(self.users), len(madors), len(anafs), len(units), "log_dir", "second_test")
+        self.logger = Log(len(self.users), len(madors), len(anafs), len(units), "log_dir", "one_cache_size_40_prob2",0)
 
     def create_structure(self):
         # global structure
@@ -96,9 +96,11 @@ class Runner:
 
 
 def main():
-    r = Runner(2000, 0.01, SimulationType.GLOBAL.value)
+    r = Runner(5000, 0.01, SimulationType.GLOBAL.value)
+    # r = Runner(5000, 0.01, SimulationType.MADOR.value)
+    # r = Runner(5000, 0.01, SimulationType.ANAF.value)
     r.run()
-    LA = LogAnalyzer("log_dir", "second_test", "results")
+    LA = LogAnalyzer("log_dir", "one_cache_size_40_prob2", "results")
     LA.gen_graphs("0")
 
 

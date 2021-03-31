@@ -117,7 +117,7 @@ class Mador:
 
 
 class User:
-    def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=0):
+    def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=0.2):
         self.unit = unit
         self.anaf = anaf
         self.mador = mador
