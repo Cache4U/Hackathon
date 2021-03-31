@@ -16,7 +16,7 @@ class Unit:
             if anaf.anaf_id == anaf_id:
                 anaf.update_req(req, mador_id)
 
-    def add_anaf(self, anaf_id, anaf_prob=0):
+    def add_anaf(self, anaf_id, anaf_prob=0.1):
         for anaf in self.anafs:
             if anaf.anaf_id == anaf_id:
                 return anaf

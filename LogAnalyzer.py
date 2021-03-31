@@ -40,14 +40,14 @@ class LogAnalyzer:
         mean_users_delays = all_users_delays.mean(axis=0)
 
         ts = np.linspace(0, self.dt * self.sim_len, self.sim_len)
-        plt.fill_between(ts, min_queue_lens, max_queue_lens)
+        plt.fill_between(ts, min_queue_lens, max_queue_lens, alpha=0.2)
         plt.plot(ts, mean_queue_lens)
         plt.xlabel("time [sec]")
         plt.ylabel("queue length")
         plt.savefig(os.path.join(self.res_dir, "queue_lens"))
         plt.close('all')
 
-        plt.fill_between(ts, min_users_delays, max_users_delays)
+        plt.fill_between(ts, min_users_delays, max_users_delays, alpha=0.2)
         plt.plot(ts, mean_users_delays)
         plt.xlabel("time [sec]")
         plt.ylabel("user delays")

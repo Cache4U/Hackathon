@@ -32,13 +32,13 @@ class Runner:
         units = Server.get_children(self.structure)[0]
         anafs = Server.get_children(units)[0]
         madors = Server.get_children(anafs)[0]
-        self.logger = Log(len(self.users), len(madors), len(anafs), len(units), "log_dir", "one_cache_size_40_prob2",0)
+        self.logger = Log(len(self.users), len(madors), len(anafs), len(units), "log_dir", "real_Anaf_size_10",0)
 
     def create_structure(self):
         # global structure
         users = []
 
-        with open('users_conf_sample.csv') as csv_file:
+        with open('users_conf_real1.csv') as csv_file:
             csv_reader = csv.reader(csv_file, delimiter=',')
             line_count = 0
             for row in csv_reader:
@@ -96,11 +96,11 @@ class Runner:
 
 
 def main():
-    r = Runner(5000, 0.01, SimulationType.GLOBAL.value)
-    # r = Runner(5000, 0.01, SimulationType.MADOR.value)
-    # r = Runner(5000, 0.01, SimulationType.ANAF.value)
+    # r = Runner(15000, 0.001, SimulationType.GLOBAL.value)
+    # r = Runner(15000, 0.001, SimulationType.MADOR.value)
+    r = Runner(15000, 0.001, SimulationType.ANAF.value)
     r.run()
-    LA = LogAnalyzer("log_dir", "one_cache_size_40_prob2", "results")
+    LA = LogAnalyzer("log_dir", "real_Anaf_size_10", "results")
     LA.gen_graphs("0")
 
 

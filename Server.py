@@ -42,7 +42,7 @@ db_path = os.path.join(db_dir_path, "db.JSON")
 cache_cwd = os.path.curdir
 cache_dir_path = os.path.join(cache_cwd, "cache_dir")
 cache_path = os.path.join(cache_dir_path, "cache")
-default_cache_capacity = 40
+default_cache_capacity = 6000
 
 counter = 0
 
