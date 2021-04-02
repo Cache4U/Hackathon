@@ -21,18 +21,17 @@ class SimulationType(Enum):
 class Runner:
     # global timer
     # global structure
-
-    def __init__(self, time_to_run, tick_length, simulation_type):
+    def __init__(self, time_to_run, tick_length, simulation_type, sim_name, sim_num, cache_size=6000):
         self.timer = 0
         self.structure = {}
         self.users = self.create_structure()
-        self.server = Server.Server(self.structure, simulation_type)
+        self.server = Server.Server(self.structure, simulation_type, cache_size)
         self.time_to_run = time_to_run
         self.tick_length = tick_length
         units = Server.get_children(self.structure)[0]
         anafs = Server.get_children(units)[0]
         madors = Server.get_children(anafs)[0]
-        self.logger = Log(len(self.users), len(madors), len(anafs), len(units), "log_dir", "real_Anaf_size_10",0)
+        self.logger = Log(len(self.users), len(madors), len(anafs), len(units), "log_dir", sim_name, sim_num)
 
     def create_structure(self):
         # global structure
@@ -49,7 +48,7 @@ class Runner:
                     unit_id = int(row[1])
                     anaf_id = int(row[2])
                     mador_id = int(row[3])
-                    request_rate = int(row[4])
+                    request_rate = int(row[4]) * 2  # change this!!
                     if unit_id not in self.structure.keys():
                         self.structure[unit_id] = Unit(unit_id)
                     anaf = self.structure[unit_id].add_anaf(anaf_id)
@@ -96,11 +95,21 @@ class Runner:
 
 
 def main():
-    # r = Runner(15000, 0.001, SimulationType.GLOBAL.value)
-    # r = Runner(15000, 0.001, SimulationType.MADOR.value)
-    r = Runner(15000, 0.001, SimulationType.ANAF.value)
-    r.run()
-    LA = LogAnalyzer("log_dir", "real_Anaf_size_10", "results")
+    # """
+    for i in range(10):
+        print("Starting simulation number: {}".format(i + 1))
+        r = Runner(1500, 0.001, SimulationType.GLOBAL.value, "real_Global_1500", i, 2500)
+        r.run()
+        r = Runner(1500, 0.001, SimulationType.MADOR.value, "real_Mador_1500", i, 750)
+        r.run()
+        r = Runner(1500, 0.001, SimulationType.ANAF.value, "real_Anaf_1500", i, 125)
+        r.run()
+    # """
+    LA = LogAnalyzer("log_dir", "real_Global_1500", "results")
+    LA.gen_graphs("0")
+    LA = LogAnalyzer("log_dir", "real_Mador_1500", "results")
+    LA.gen_graphs("0")
+    LA = LogAnalyzer("log_dir", "real_Anaf_1500", "results")
     LA.gen_graphs("0")
 
 

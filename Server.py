@@ -33,6 +33,7 @@ def get_children(entity):
     else:
         raise TypeError("Unexpected entity")
 
+
 # Create DB Dir
 db_cwd = os.path.curdir
 db_dir_path = os.path.join(db_cwd, "db_dir")
@@ -42,22 +43,23 @@ db_path = os.path.join(db_dir_path, "db.JSON")
 cache_cwd = os.path.curdir
 cache_dir_path = os.path.join(cache_cwd, "cache_dir")
 cache_path = os.path.join(cache_dir_path, "cache")
-default_cache_capacity = 6000
 
 counter = 0
 
+
 class Server:
-    def __init__(self, structure: dict, cache_type: SimulationType):
+    def __init__(self, structure: dict, cache_type: SimulationType, default_cache_capacity=6000):
         global cache_path
         self.structure = structure
 
         self.cache_type = cache_type
         self.global_cache = None
         if self.cache_type == SimulationType.GLOBAL.value:
-            cache_path = cache_path+".JSON"
+            cache_path = cache_path + ".JSON"
             self.global_cache = basicCache(cache_path, default_cache_capacity)
         else:
-            self.caches = {cache_name: basicCache(cache_path+str(i)+".JSON", default_cache_capacity) for i, cache_name in enumerate(self.get_caches_to_create())}
+            self.caches = {cache_name: basicCache(cache_path + str(i) + ".JSON", default_cache_capacity) for
+                           i, cache_name in enumerate(self.get_caches_to_create())}
         self.db = basicDatabase(db_path)
 
         self.que = []
@@ -81,7 +83,7 @@ class Server:
             if self.cache_type == SimulationType.GLOBAL.value:
                 curr_cache = self.global_cache
             else:
-                curr_cache = self.caches[getattr(request, self.cache_type[1])] # by the attr of cache type[1]
+                curr_cache = self.caches[getattr(request, self.cache_type[1])]  # by the attr of cache type[1]
 
             # get response from cache if available
             response = curr_cache.get_from_db(request.query)

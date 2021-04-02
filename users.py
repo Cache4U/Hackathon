@@ -3,6 +3,7 @@ import copy
 import json
 from hashlib import sha256
 
+
 class Unit:
     def __init__(self, unit_id, prob=0):
         self.unit_id = unit_id
@@ -127,7 +128,7 @@ class User:
 
     def generate_request(self, unit):
         mador = get_mador(unit, self.anaf, self.mador)
-        if random.random() < self.prob or len(mador.past_requests)==0 or mador.past_requests is None:
+        if random.random() < self.prob or len(mador.past_requests) == 0 or mador.past_requests is None:
             req = Request(self.unit, self.anaf, self.mador, self.user_id)
             unit.update_req(req, self.anaf, self.mador)
             return req
