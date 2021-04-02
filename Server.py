@@ -48,7 +48,7 @@ counter = 0
 
 
 class Server:
-    def __init__(self, structure: dict, cache_type: SimulationType, default_cache_capacity=6000):
+    def __init__(self, structure: dict, cache_type: SimulationType, default_cache_capacity):
         global cache_path
         self.structure = structure
 
@@ -87,7 +87,7 @@ class Server:
 
             # get response from cache if available
             response = curr_cache.get_from_db(request.query)
-            if response:
+            if response is None:
                 return response
 
         if timer - self.last_busy_tick >= Consts.DB_TICKS:
