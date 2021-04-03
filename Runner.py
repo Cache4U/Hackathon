@@ -21,7 +21,7 @@ class SimulationType(Enum):
 class Runner:
     # global timer
     # global structure
-    def __init__(self, time_to_run, tick_length, simulation_type, sim_name, sim_num, cache_size=6000):
+    def __init__(self, time_to_run, tick_length, simulation_type, sim_name, sim_num, cache_size):
         self.timer = 0
         self.structure = {}
         self.users = self.create_structure()
@@ -32,6 +32,19 @@ class Runner:
         anafs = Server.get_children(units)[0]
         madors = Server.get_children(anafs)[0]
         self.logger = Log(len(self.users), len(madors), len(anafs), len(units), "log_dir", sim_name, sim_num)
+        self.user_req_probs = self.gen_probs()
+
+    def gen_probs(self):
+        probs = []
+        sum_rates = 0
+        for user in self.users:
+            sum_rates += user.request_rate
+            probs.append(user.request_rate)
+
+        p_request_exists = sum_rates * self.tick_length
+        probs = [(p / sum_rates) * p_request_exists for p in probs]
+        probs.append(1 - p_request_exists)
+        return probs
 
     def create_structure(self):
         # global structure
@@ -48,7 +61,7 @@ class Runner:
                     unit_id = int(row[1])
                     anaf_id = int(row[2])
                     mador_id = int(row[3])
-                    request_rate = int(row[4]) * 2  # change this!!
+                    request_rate = int(row[4])
                     if unit_id not in self.structure.keys():
                         self.structure[unit_id] = Unit(unit_id)
                     anaf = self.structure[unit_id].add_anaf(anaf_id)
@@ -75,16 +88,7 @@ class Runner:
         self.logger.write()
 
     def generate_action(self):
-        probs = []
-        sum_rates = 0
-        for user in self.users:
-            sum_rates += user.request_rate
-            probs.append(user.request_rate)
-
-        p_request_exists = sum_rates * self.tick_length
-        probs = [(p / sum_rates) * p_request_exists for p in probs]
-        probs.append(1 - p_request_exists)
-        chosen_user = np.random.choice(self.users + [None], 1, p=probs)[0]
+        chosen_user = np.random.choice(self.users + [None], 1, p=self.user_req_probs)[0]
         # print(chosen_user)
         if chosen_user is not None:  # else there is no request
             request = chosen_user.generate_request(self.structure[chosen_user.unit])
@@ -96,20 +100,21 @@ class Runner:
 
 def main():
     # """
-    for i in range(10):
+    for i in range(1):
         print("Starting simulation number: {}".format(i + 1))
-        r = Runner(1500, 0.001, SimulationType.GLOBAL.value, "real_Global_1500", i, 2500)
+        r = Runner(15000, 0.001, SimulationType.GLOBAL.value, "real_Global_1800", i, 480)
         r.run()
-        r = Runner(1500, 0.001, SimulationType.MADOR.value, "real_Mador_1500", i, 750)
+        r = Runner(15000, 0.001, SimulationType.ANAF.value, "real_Anaf_1800", i, 80)
         r.run()
-        r = Runner(1500, 0.001, SimulationType.ANAF.value, "real_Anaf_1500", i, 125)
+        # r = Runner(10000, 0.001, SimulationType.MADOR.value, "real_Mador_1800", i, 125)
+        r = Runner(15000, 0.001, SimulationType.MADOR.value, "real_Mador_1800", i, 24)
         r.run()
     # """
-    LA = LogAnalyzer("log_dir", "real_Global_1500", "results")
+    LA = LogAnalyzer("log_dir", "real_Global_1800", "results")
     LA.gen_graphs("0")
-    LA = LogAnalyzer("log_dir", "real_Mador_1500", "results")
+    LA = LogAnalyzer("log_dir", "real_Mador_1800", "results")
     LA.gen_graphs("0")
-    LA = LogAnalyzer("log_dir", "real_Anaf_1500", "results")
+    LA = LogAnalyzer("log_dir", "real_Anaf_1800", "results")
     LA.gen_graphs("0")
 
 

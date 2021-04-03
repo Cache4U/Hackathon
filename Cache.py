@@ -26,11 +26,12 @@ class basicCache(abstractDatabase):
             self.dump_db_to_file()
 
     def get_from_db(self, key):
+        print(len(self.db.keys()))
         if key in self.db:
-            print("hittttttttt!!!!!!!!!!!")
+            print("Hittttttt")
             return self.db[str(key)]
         else:
-            print("missssssss")
+            print("Missssss")
             return None
 
     # (cache miss has occurred and we are updating the cache) (called from insert)

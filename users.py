@@ -45,7 +45,7 @@ class Unit:
 
 
 class Anaf:
-    def __init__(self, unit, anaf_id, prob=0.1):
+    def __init__(self, unit, anaf_id, prob=0.3):
         self.unit = unit
         self.anaf_id = anaf_id
         self.prob = prob
@@ -118,7 +118,7 @@ class Mador:
 
 
 class User:
-    def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=0.2):
+    def __init__(self, unit, anaf, mador, user_id, request_rate=1, prob=0.4):
         self.unit = unit
         self.anaf = anaf
         self.mador = mador

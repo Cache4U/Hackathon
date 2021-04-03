@@ -87,7 +87,7 @@ class Server:
 
             # get response from cache if available
             response = curr_cache.get_from_db(request.query)
-            if response is None:
+            if response is not None:
                 return response
 
         if timer - self.last_busy_tick >= Consts.DB_TICKS:

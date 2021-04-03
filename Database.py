@@ -62,7 +62,6 @@ class abstractDatabase(ABC):
     def __init__(self, location):
         self.db = OrderedDict()
         self.db_location = os.path.expanduser(location)
-        self.load_from_file(self.db_location)
 
     @abstractmethod
     def load_from_file(self, db_location):
@@ -103,6 +102,7 @@ class basicDatabase(abstractDatabase):
 
     def __init__(self, location):
         super().__init__(location)
+        self.load_from_file(self.db_location)
 
     def delete_from_db(self, key):
         if key not in self.db:
